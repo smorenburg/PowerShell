@@ -1,1 +1,2 @@
-# powershell-general
+# PowerShell General
+The general PowerShell repository.
