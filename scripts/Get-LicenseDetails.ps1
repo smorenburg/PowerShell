@@ -36,7 +36,7 @@ Connect-MSolService
 foreach ($rule in $rules) {
     $user = Get-MsolUser -UserPrincipalName $rule.UserPrincipalName
 
-    if ($user.Licenses.AccountSkuId) {
+    if ($user.Licenses) {
         $user.Licenses.AccountSkuId | ForEach-Object {
             $license = $_
 
