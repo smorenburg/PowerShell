@@ -34,7 +34,7 @@ Connect-MSolService
 foreach ($rule in $rules) {
     $user = Get-MsolUser -UserPrincipalName $rule.UserPrincipalName
     if ($user.Licenses) {
-        $user.Licenses.AccountSkuId | ForEach-Object {
+        $user.Licenses.AccountSkuId | Where-Object { $_ } | ForEach-Object {
             $license = $_
             $licenseDetails = [ordered]@{
                 "UserPrincipalName" = [string]$rule.UserPrincipalName
