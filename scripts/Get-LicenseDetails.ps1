@@ -36,21 +36,21 @@ foreach ($rule in $rules) {
     if ($user.Licenses) {
         $user.Licenses.AccountSkuId | Where-Object { $_ } | ForEach-Object {
             $license = $_
-            $licenseDetails = [ordered]@{
+            $details = [ordered]@{
                 "UserPrincipalName" = [string]$rule.UserPrincipalName
                 "Present"           = "TRUE"
                 "License"           = [string]$license
             }
-            [void]$output.Add((New-Object PSObject -Property $licenseDetails))
+            [void]$output.Add((New-Object PSObject -Property $details))
         }     
     }
     else {
-        $licenseDetails = [ordered]@{
+        $details = [ordered]@{
             "UserPrincipalName" = [string]$rule.UserPrincipalName
             "Present"           = "FALSE"
             "License"           = $null
         }
-        [void]$output.Add((New-Object PSObject -Property $licenseDetails))
+        [void]$output.Add((New-Object PSObject -Property $details))
     }
 }
 
