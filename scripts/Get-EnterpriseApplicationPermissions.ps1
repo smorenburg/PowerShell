@@ -556,10 +556,10 @@ function Get-ApplicationPermissions {
             $role = $resource.AppRoles | Where-Object { $_.Id -eq $assignment.Id }
             $policy = $policies | Where-Object { $_.AppID -eq $client.AppId }
             if ($policy) {
-                $policyPresent = "True"
+                $policyPresent = "TRUE"
             }
             else {
-                $policyPresent = "False"
+                $policyPresent = "FALSE"
                 $policy = $empty
             }
             $permissionDetails = [ordered]@{

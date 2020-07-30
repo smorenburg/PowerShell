@@ -21,7 +21,7 @@ param(
     [Parameter(
         Mandatory = $true
     )]
-    [Object]$InputFile,
+    [object]$InputFile,
     [Parameter()]
     [object]$OutputFile = ".\License Details $(Get-Date -Format yyyyMMdd-HHmm).csv"
 )
