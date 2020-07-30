@@ -22,9 +22,7 @@ param(
         Mandatory = $true
     )]
     [Object]$InputFile,
-
-    [Parameter(
-    )]
+    [Parameter()]
     [object]$OutputFile = ".\License Details $(Get-Date -Format yyyyMMdd-HHmm).csv"
 )
 
@@ -35,17 +33,14 @@ Connect-MSolService
 
 foreach ($rule in $rules) {
     $user = Get-MsolUser -UserPrincipalName $rule.UserPrincipalName
-
     if ($user.Licenses) {
         $user.Licenses.AccountSkuId | ForEach-Object {
             $license = $_
-
             $licenseDetails = [ordered]@{
                 "UserPrincipalName" = [string]$rule.UserPrincipalName
                 "Present"           = "TRUE"
                 "License"           = [string]$license
             }
-
             [void]$output.Add((New-Object PSObject -Property $licenseDetails))
         }     
     }
@@ -55,7 +50,6 @@ foreach ($rule in $rules) {
             "Present"           = "FALSE"
             "License"           = $null
         }
-
         [void]$output.Add((New-Object PSObject -Property $licenseDetails))
     }
 }

@@ -533,11 +533,9 @@ $rules = Import-Csv $InputFile -Delimiter ";"
 
 Connect-ExchangeService -EXO
 Connect-ExchangeService -EXP -SessionPrefix EXP
-
 Set-EXPADServerSettings -ViewEntireForest $true
 
 $output = foreach ($rule in $rules) {
-
     $recipient = Get-EXPRecipient $rule.Email
     # Exchange Online
     if (($recipient.RecipientTypeDetails -eq "RemoteUserMailbox") -xor ($recipient.RecipientTypeDetails -eq "RemoteSharedMailbox")) {
@@ -566,14 +564,12 @@ $output = foreach ($rule in $rules) {
     else {
         $location = "Unknown"
     }
-
     New-Object -TypeName PSObject -Property @{
         Name                 = $recipient.Name
         Email                = $recipient.PrimarySmtpAddress
         Location             = $location
         RecipientTypeDetails = $recipient.RecipientTypeDetails
     }
-
 } 
 
 $output | Select-Object Name, Email, Location, RecipientTypeDetails | Export-Csv -Path .\MailboxLocations.csv -Delimiter ";" -NoTypeInformation -Encoding UTF8

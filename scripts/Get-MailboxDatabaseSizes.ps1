@@ -21,13 +21,11 @@ foreach ($database in $databases) {
     $database = Get-MailboxDatabase $database -Status
     $databaseSize = $database.DatabaseSize -Replace $pattern, "`$1"
     $availableNewMailboxSpace = $database.AvailableNewMailboxSpace -Replace $pattern, "`$1"
-
     $details = [ordered]@{
         "Name"                          = [string]$database.Name
         "DatabaseSize (GB)"             = [int]$databaseSize
         "AvailableNewMailboxSpace (GB)" = [int]$availableNewMailboxSpace
     }
-
     [void]$output.Add((New-Object -TypeName PSObject -Property $details))
 }
 

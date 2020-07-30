@@ -24,21 +24,15 @@
 
 [CmdletBinding()]
 param(
-    [Parameter(
-    )]
+    [Parameter()]
     [switch]$Application,    
-
-    [Parameter(
-    )]
+    [Parameter()]
     [switch]$Delegated,
-
     [Parameter(
         Mandatory = $true
     )]
     [string]$AccountId,
-
-    [Parameter(
-    )]
+    [Parameter()]
     [object]$OutputFile = ".\Enterprise Application Permissions $(Get-Date -Format yyyyMMdd-HHmm).csv"
 )
 
@@ -552,11 +546,8 @@ function Connect-ExchangeService {
 function Get-ApplicationPermissions {
     Write-Output `n"Connecting to Exchange Online using account: $AccountId."
     Connect-ExchangeService -EXO -UserPrincipalName $AccountId -Force
-    
     Write-Output `n"Collecting the application permissions."
-
     $policies = Get-ApplicationAccessPolicy
-
     $principals | ForEach-Object {
         Get-AzureADServiceAppRoleAssignedTo -ObjectID $_.ObjectId -All:$true | Where-Object { $_.PrincipalType -eq "ServicePrincipal" } | ForEach-Object {
             $assignment = $_
@@ -564,7 +555,6 @@ function Get-ApplicationPermissions {
             $resource = $principals | Where-Object { $_.ObjectId -eq $assignment.ResourceId }
             $role = $resource.AppRoles | Where-Object { $_.Id -eq $assignment.Id }
             $policy = $policies | Where-Object { $_.AppID -eq $client.AppId }
-
             if ($policy) {
                 $policyPresent = "True"
             }
@@ -572,7 +562,6 @@ function Get-ApplicationPermissions {
                 $policyPresent = "False"
                 $policy = $empty
             }
-         
             $permissionDetails = [ordered]@{
                 "PermissionType"       = "Application"
                 "ClientObjectId"       = $assignment.PrincipalId
@@ -589,7 +578,6 @@ function Get-ApplicationPermissions {
                 "PrincipalDisplayName" = $null
                 "PrincipalUserName"    = $null
             }
-
             [void]$output.Add((New-Object PSObject -Property $permissionDetails))
         }
     }
@@ -597,21 +585,17 @@ function Get-ApplicationPermissions {
 
 function Get-DelegatedPermissions {
     Write-Output `n"Collecting the delegated permissions."
-
     Get-AzureADOAuth2PermissionGrant -All:$true | ForEach-Object {
         $grant = $_
         $client = $principals | Where-Object { $_.ObjectId -eq $grant.ClientId }
         $resource = $principals | Where-Object { $_.ObjectId -eq $grant.ResourceId }
         $user = $empty
-
         if ($grant.PrincipalId) {
             $user = Get-AzureADUser -ObjectId $grant.PrincipalId
         }
-
         if ($grant.Scope) {
             $grant.Scope.Split(" ") | Where-Object { $_ } | ForEach-Object {
                 $scope = $_
-
                 $permissionDetails = [ordered]@{
                     "PermissionType"       = "Delegated"
                     "ClientObjectId"       = $grant.ClientId
@@ -628,7 +612,6 @@ function Get-DelegatedPermissions {
                     "PrincipalDisplayName" = $user.DisplayName
                     "PrincipalUserName"    = $user.UserPrincipalName
                 }
-
                 [void]$output.Add((New-Object PSObject -Property $permissionDetails))
             }
         }
@@ -638,7 +621,7 @@ function Get-DelegatedPermissions {
 Write-Output `n"Connecting to Azure AD using account: $AccountId."
 Connect-AzureAD -AccountId $AccountId
 
-$empty = @{ }
+$empty = @{}
 $output = New-Object System.Collections.ArrayList
 $principals = Get-AzureADServicePrincipal -All:$true
 

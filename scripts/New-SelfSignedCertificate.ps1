@@ -36,10 +36,8 @@ param(
 
 $currentDate = Get-Date 
 $notAfter = $currentDate.AddYears($YearsValid)
-
 $store = "cert:\CurrentUser\My"
 $thumbprint = $(New-SelfSignedCertificate -DnsName $name -CertStoreLocation $store -KeyExportPolicy Exportable -NotAfter $notAfter).Thumbprint
-
 $cerFilePath = ".\$($name).cer"
 $pfxFilePath = ".\$($name).pfx"
 
