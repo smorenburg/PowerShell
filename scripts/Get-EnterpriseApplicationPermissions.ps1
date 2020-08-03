@@ -1,9 +1,9 @@
 <#
 .SYNOPSIS
-    Collect the enterprise application permissions and export the permissions to a file.
+    Collect the enterprise application permissions and export the permissions to a comma-separated values file.
 
 .DESCRIPTION
-    This script collects the enterprise application delegated and/or application permissions.
+    This script collects the enterprise application dpermissions.
 
 .PARAMETER AccountId
 
@@ -63,7 +63,6 @@ function Get-ApplicationPermissions {
 }
 
 function Get-DelegatedPermissions {
-    Write-Output `n"Collecting the delegated permissions."
     Get-AzureADOAuth2PermissionGrant -All:$true | ForEach-Object {
         $grant = $_
         $client = $principals | Where-Object { $_.ObjectId -eq $grant.ClientId }
