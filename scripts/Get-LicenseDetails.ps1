@@ -8,6 +8,8 @@
 .PARAMETER OutputFile
 
 .EXAMPLE
+    Get-LicenseDetails -InputFile <file>
+    Get-LicenseDetails -InputFile <file> -OutputFile <file>
 
 .LINK
     https://www.smorenburg.io
@@ -18,23 +20,21 @@
 
 [CmdletBinding()]
 param(
-    [Parameter(
-        Mandatory = $true
-    )]
+    [Parameter(Mandatory = $true)]
     [object]$InputFile,
     [Parameter()]
     [object]$OutputFile = ".\License Details $(Get-Date -Format yyyyMMdd-HHmm).csv"
 )
 
-$rules = Import-Csv $InputFile -Delimiter ","
+$lines = Import-Csv $InputFile -Delimiter ","
 $output = New-Object System.Collections.ArrayList
 
 Connect-MSolService
 
-foreach ($rule in $rules) {
+foreach ($line in $lines) {
     $user = Get-MsolUser -UserPrincipalName $rule.UserPrincipalName
     if ($user.Licenses) {
-        $user.Licenses.AccountSkuId | Where-Object { $_ } | ForEach-Object {
+        $user.Licenses.AccountSkuId | ForEach-Object {
             $license = $_
             $details = [ordered]@{
                 "UserPrincipalName" = [string]$rule.UserPrincipalName

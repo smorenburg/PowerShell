@@ -4,6 +4,7 @@
 .DESCRIPTION
     
 .EXAMPLE
+    Get-MailboxDatabaseSizes
     
 .LINK
     https://www.smorenburg.io

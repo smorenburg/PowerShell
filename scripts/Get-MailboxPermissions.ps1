@@ -16,9 +16,7 @@
 
 [CmdletBinding()]
 param(
-    [Parameter(
-        Mandatory = $true
-    )]
+    [Parameter(Mandatory = $true)]
     [object]$InputFile
 )
 
@@ -529,13 +527,13 @@ function Connect-ExchangeService {
     }
 }
 
-$rules = Import-Csv $InputFile -Delimiter ";"
+$lines = Import-Csv $InputFile -Delimiter ";"
 
 Connect-ExchangeService -EXO
 Connect-ExchangeService -EXP -SessionPrefix EXP
 Set-EXPADServerSettings -ViewEntireForest $true
 
-$output = foreach ($rule in $rules) {
+$output = foreach ($line in $lines) {
     $recipient = Get-EXPRecipient $rule.Email
     # Exchange Online
     if (($recipient.RecipientTypeDetails -eq "RemoteUserMailbox") -xor ($recipient.RecipientTypeDetails -eq "RemoteSharedMailbox")) {

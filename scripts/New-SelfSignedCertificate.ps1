@@ -7,7 +7,11 @@
 
 .PARAMETER Password
 
-.EXAMPLE    
+.PARAMETER YearsValid
+
+.EXAMPLE
+    New-SelfSignedCertificate -Name <name> -Password <password>
+    New-SelfSignedCertificate -Name <name> -Password <password> -YearsValid <years>
 
 .LINK
     https://www.smorenburg.io
@@ -18,20 +22,12 @@
 
 [CmdletBinding()]
 param(
-    [Parameter(
-        Mandatory = $true
-    )]
+    [Parameter(Mandatory = $true)]
     [string]$Name,
-
-    [Parameter(
-        Mandatory = $true
-    )]
-    [int]$YearsValid,
-
-    [Parameter(
-        Mandatory = $true
-    )]
-    [securestring]$Password
+    [Parameter(Mandatory = $true)]
+    [securestring]$Password,
+    [Parameter(Mandatory = $true)]
+    [int]$YearsValid = "2"
 )
 
 $currentDate = Get-Date 
