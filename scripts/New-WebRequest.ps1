@@ -13,8 +13,14 @@
 $uri = ""
 
 $json = @(
-    @{ Key01 = "Value01"; Key02 = "Value02" },
-    @{ Key01 = "Value01"; Key02 = "Value02" }
+    [ordered]@{ 
+        Key01 = "Value01";
+        Key02 = "Value02"
+    },
+    [ordered]@{
+        Key01 = "Value01";
+        Key02 = "Value02"
+    }
 )
 
 $body = ConvertTo-Json -InputObject $json
