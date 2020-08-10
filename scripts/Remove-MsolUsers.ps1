@@ -30,7 +30,7 @@ param(
 
 $lines = Import-Csv $InputFile -Delimiter ";"
 
-Connect-MSolService
+Connect-MsolService
 
 foreach ($line in $lines) {
     if ($RemoveFromRecycleBin.IsPresent) {

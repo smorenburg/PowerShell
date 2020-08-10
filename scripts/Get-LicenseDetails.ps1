@@ -29,7 +29,7 @@ param(
 $lines = Import-Csv $InputFile -Delimiter ","
 $output = New-Object System.Collections.ArrayList
 
-Connect-MSolService
+Connect-MsolService
 
 foreach ($line in $lines) {
     $user = Get-MsolUser -UserPrincipalName $rule.UserPrincipalName
