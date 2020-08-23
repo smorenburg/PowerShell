@@ -34,6 +34,7 @@ Connect-MsolService
 
 foreach ($line in $lines) {
     if ($RemoveFromRecycleBin.IsPresent) {
+        Remove-MsolUser -UserPrincipalName $rule.UserPrincipalName
         Remove-MsolUser -UserPrincipalName $rule.UserPrincipalName -RemoveFromRecycleBin
     }
     else {
