@@ -136,7 +136,7 @@ Connect-AzureAD `
     -AccountId $AccountId
 
 # Prepare variables
-$empty = @{}
+$empty = @()
 $output = New-Object `
     -TypeName System.Collections.ArrayList
 
