@@ -97,7 +97,8 @@ function Get-DelegatedPermissions {
         Where-Object { $_.ObjectId -eq $grant.ResourceId }
 
         if ($grant.PrincipalId) {
-            $user = Get-AzureADUser -ObjectId $grant.PrincipalId
+            $user = Get-AzureADUser `
+                -ObjectId $grant.PrincipalId
         }
 
         if ($grant.Scope) {
@@ -138,7 +139,7 @@ Connect-AzureAD `
 $empty = @{}
 $output = New-Object `
     -TypeName System.Collections.ArrayList
-    
+
 $principals = Get-AzureADServicePrincipal `
     -All:$true
 
