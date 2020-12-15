@@ -43,16 +43,22 @@ param(
 
 # Create functions
 function Get-ApplicationPermissions {
-    $principals | ForEach-Object {
+    $principals | 
+    ForEach-Object {
         Get-AzureADServiceAppRoleAssignedTo `
             -ObjectID $_.ObjectId `
             -All:$true |
         Where-Object { $_.PrincipalType -eq 'ServicePrincipal' } | 
         ForEach-Object {
             $assignment = $_
-            $client = $principals | Where-Object { $_.ObjectId -eq $assignment.PrincipalId }
-            $resource = $principals | Where-Object { $_.ObjectId -eq $assignment.ResourceId }
-            $role = $resource.AppRoles | Where-Object { $_.Id -eq $assignment.Id }
+            $client = $principals |
+            Where-Object { $_.ObjectId -eq $assignment.PrincipalId }
+
+            $resource = $principals |
+            Where-Object { $_.ObjectId -eq $assignment.ResourceId }
+            
+            $role = $resource.AppRoles |
+            Where-Object { $_.Id -eq $assignment.Id }
             
             $details = [ordered]@{
                 'PermissionType'       = 'Application'
@@ -83,9 +89,12 @@ function Get-DelegatedPermissions {
     Get-AzureADOAuth2PermissionGrant -All:$true | 
     ForEach-Object {
         $grant = $_
-        $client = $principals | Where-Object { $_.ObjectId -eq $grant.ClientId }
-        $resource = $principals | Where-Object { $_.ObjectId -eq $grant.ResourceId }
         $user = $empty
+        $client = $principals |
+        Where-Object { $_.ObjectId -eq $grant.ClientId }
+
+        $resource = $principals |
+        Where-Object { $_.ObjectId -eq $grant.ResourceId }
 
         if ($grant.PrincipalId) {
             $user = Get-AzureADUser -ObjectId $grant.PrincipalId
@@ -122,12 +131,16 @@ function Get-DelegatedPermissions {
 }
 
 # Connect to Azure
-Connect-AzureAD -AccountId $AccountId
+Connect-AzureAD `
+    -AccountId $AccountId
 
 # Prepare variables
 $empty = @{}
-$output = New-Object -TypeName System.Collections.ArrayList
-$principals = Get-AzureADServicePrincipal -All:$true
+$output = New-Object `
+    -TypeName System.Collections.ArrayList
+    
+$principals = Get-AzureADServicePrincipal `
+    -All:$true
 
 # Parameter logic
 if ($Application.IsPresent) {
